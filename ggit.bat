@@ -24,4 +24,3 @@ if errorlevel 1 (
 git push -u origin main
 
 pause
-```
