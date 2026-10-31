@@ -1,8 +1,10 @@
-```bat
+
 @echo off
 cd /d F:\Projects\machin-learning2
 
 git init
+
+git status
 git add .
 
 git diff --cached --quiet

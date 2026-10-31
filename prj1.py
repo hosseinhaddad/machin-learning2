@@ -5,13 +5,15 @@ from tensorflow.keras import layers
 
 
 from _draw import draw_loss
+
+EPOCH=100;
 x=int(input("Enter Epoch?"))
 if x<=0 : 
     EPOCH=100; 
 else: 
     EPOCH=x
 
-EPOCH=100;
+
 
 tf.keras.utils.set_random_seed(42)
 # 1. Prepare the data
