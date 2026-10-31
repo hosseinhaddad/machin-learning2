@@ -51,6 +51,17 @@ history = model.fit(
     verbose=0
 )
 
+
+# Evaluate on unseen test data
+test_loss, test_mae = model.evaluate(
+    X_test,
+    y_test,
+    verbose=0
+)
+
+print("Test Loss:", test_loss)
+print("Test MAE:", test_mae)
+
 # 5. Predict new values
 X_new = np.array([13, 17], dtype=np.float32)
 
@@ -63,8 +74,8 @@ print("Final Loss:", history.history["loss"][-1])
 print("Final MAE:", history.history["mae"][-1])
 
 print("Epoch:", EPOCH)
-print("X:", X)
-print("Y:", y)
+#print("X:", X)
+#print("Y:", y)
 
 print("\nPredictions:")
 for x_value, predicted in zip(X_new, y_pred.flatten()):
