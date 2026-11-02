@@ -151,8 +151,15 @@ for lr in learning_rates:
 
     histories[lr] = history.history
 
+    print("First 5 Validation Loss values:")
+    print(history.history["val_loss"][:5])
+
+    print("Last 5 Validation Loss values:")
+    print(history.history["val_loss"][-5:])
     # --------------------------------------------------
     # 8. Print Evaluation Results
+    # --------------------------------------------------
+    # --------------------------------------------------
     # --------------------------------------------------
 
     train_loss, train_mae = model.evaluate(
