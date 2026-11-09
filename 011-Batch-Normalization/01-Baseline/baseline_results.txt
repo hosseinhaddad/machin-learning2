@@ -1,0 +1,25 @@
+==============================
+Baseline Results
+==============================
+
+Epochs: 100
+Batch Size: 16
+Learning Rate: 0.001
+
+Model Architecture:
+Input(6)
+Dense(128, ReLU)
+Dense(128, ReLU)
+Dense(64, ReLU)
+Dense(1)
+
+Final Evaluation Results:
+
+Train Loss: 4.0697
+Train MAE: 1.5937
+
+Validation Loss: 7.4934
+Validation MAE: 2.0638
+
+Test Loss: 4.4193
+Test MAE: 1.7026
