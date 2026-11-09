@@ -1,0 +1,37 @@
+==============================
+Batch Normalization Results
+==============================
+
+Execution Date: 2026-11-09
+Execution Time: 22:02:02
+Execution Duration: 62.44 seconds
+Execution Duration: 1.04 minutes
+
+Training Configuration:
+Epochs: 100
+Batch Size: 16
+Learning Rate: 0.001
+
+Model Architecture:
+Input(6)
+Dense(128)
+BatchNormalization
+ReLU
+Dense(128)
+BatchNormalization
+ReLU
+Dense(64)
+BatchNormalization
+ReLU
+Dense(1)
+
+Final Evaluation Results:
+
+Train Loss: 5.2716
+Train MAE: 1.8317
+
+Validation Loss: 9.4775
+Validation MAE: 2.3974
+
+Test Loss: 6.2683
+Test MAE: 1.9253
