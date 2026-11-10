@@ -1,0 +1,478 @@
+import os
+import time
+from datetime import datetime
+
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+
+
+# ============================================================
+# Configuration
+# ============================================================
+
+SEED = 42
+SAMPLES = 1000
+EPOCHS = 100
+BATCH_SIZE = 32
+LEARNING_RATE = 0.001
+
+RESULTS_DIR = "results"
+
+os.makedirs(RESULTS_DIR, exist_ok=True)
+
+
+# ============================================================
+# Reproducibility
+# ============================================================
+
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
+
+
+# ============================================================
+# Program Start
+# ============================================================
+
+program_start = time.perf_counter()
+start_datetime = datetime.now()
+
+
+# ============================================================
+# Create Dataset
+# ============================================================
+
+X = np.random.uniform(
+    -1,
+    1,
+    (SAMPLES, 3)
+)
+
+y = (
+    3 * X[:, 0]
+    + 2 * X[:, 1]
+    - 4 * X[:, 2]
+    + 1
+)
+
+y = y.reshape(-1, 1)
+
+
+# ============================================================
+# Model Creation
+# ============================================================
+
+def create_model(initializer):
+
+    model = tf.keras.Sequential([
+
+        tf.keras.layers.Input(shape=(3,)),
+
+        tf.keras.layers.Dense(
+            16,
+            activation="relu",
+            kernel_initializer=initializer
+        ),
+
+        tf.keras.layers.Dense(
+            16,
+            activation="relu",
+            kernel_initializer=initializer
+        ),
+
+        tf.keras.layers.Dense(
+            1,
+            kernel_initializer="zeros"
+        )
+    ])
+
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(
+            learning_rate=LEARNING_RATE
+        ),
+        loss="mse",
+        metrics=["mae"]
+    )
+
+    return model
+
+
+# ============================================================
+# Experiment 1: Random Normal
+# ============================================================
+
+print("=" * 60)
+print("Experiment 1: Random Normal")
+print("=" * 60)
+
+random_start = time.perf_counter()
+
+random_model = create_model(
+    tf.keras.initializers.RandomNormal(
+        mean=0.0,
+        stddev=0.05
+    )
+)
+
+random_history = random_model.fit(
+    X,
+    y,
+    epochs=EPOCHS,
+    batch_size=BATCH_SIZE,
+    validation_split=0.2,
+    verbose=0
+)
+
+random_duration = time.perf_counter() - random_start
+
+
+# ============================================================
+# Experiment 2: Xavier / Glorot
+# ============================================================
+
+print()
+print("=" * 60)
+print("Experiment 2: Xavier / Glorot")
+print("=" * 60)
+
+glorot_start = time.perf_counter()
+
+glorot_model = create_model(
+    tf.keras.initializers.GlorotUniform()
+)
+
+glorot_history = glorot_model.fit(
+    X,
+    y,
+    epochs=EPOCHS,
+    batch_size=BATCH_SIZE,
+    validation_split=0.2,
+    verbose=0
+)
+
+glorot_duration = time.perf_counter() - glorot_start
+
+
+# ============================================================
+# Experiment 3: He Normal
+# ============================================================
+
+print()
+print("=" * 60)
+print("Experiment 3: He Normal")
+print("=" * 60)
+
+he_start = time.perf_counter()
+
+he_model = create_model(
+    tf.keras.initializers.HeNormal()
+)
+
+he_history = he_model.fit(
+    X,
+    y,
+    epochs=EPOCHS,
+    batch_size=BATCH_SIZE,
+    validation_split=0.2,
+    verbose=0
+)
+
+he_duration = time.perf_counter() - he_start
+
+
+# ============================================================
+# Extract Final Results
+# ============================================================
+
+results = {
+    "Random Normal": {
+        "train_loss": random_history.history["loss"][-1],
+        "val_loss": random_history.history["val_loss"][-1],
+        "train_mae": random_history.history["mae"][-1],
+        "val_mae": random_history.history["val_mae"][-1],
+        "duration": random_duration
+    },
+
+    "Xavier / Glorot": {
+        "train_loss": glorot_history.history["loss"][-1],
+        "val_loss": glorot_history.history["val_loss"][-1],
+        "train_mae": glorot_history.history["mae"][-1],
+        "val_mae": glorot_history.history["val_mae"][-1],
+        "duration": glorot_duration
+    },
+
+    "He Normal": {
+        "train_loss": he_history.history["loss"][-1],
+        "val_loss": he_history.history["val_loss"][-1],
+        "train_mae": he_history.history["mae"][-1],
+        "val_mae": he_history.history["val_mae"][-1],
+        "duration": he_duration
+    }
+}
+
+
+# ============================================================
+# Program End
+# ============================================================
+
+program_duration = time.perf_counter() - program_start
+end_datetime = datetime.now()
+
+
+# ============================================================
+# Print Results
+# ============================================================
+
+print()
+print("=" * 60)
+print("FINAL RESULTS")
+print("=" * 60)
+
+for name, result in results.items():
+
+    print()
+    print(name)
+
+    print(
+        f"Training Loss:   {result['train_loss']:.6f}"
+    )
+
+    print(
+        f"Validation Loss: {result['val_loss']:.6f}"
+    )
+
+    print(
+        f"Training MAE:    {result['train_mae']:.6f}"
+    )
+
+    print(
+        f"Validation MAE:  {result['val_mae']:.6f}"
+    )
+
+    print(
+        f"Execution Time:  {result['duration']:.4f} seconds"
+    )
+
+
+print()
+print("=" * 60)
+print("PROGRAM INFORMATION")
+print("=" * 60)
+
+print(f"Start Time: {start_datetime}")
+print(f"End Time:   {end_datetime}")
+print(f"Total Execution Time: {program_duration:.4f} seconds")
+
+
+# ============================================================
+# Plot 1: Training Loss
+# ============================================================
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(
+    random_history.history["loss"],
+    label="Random Normal"
+)
+
+plt.plot(
+    glorot_history.history["loss"],
+    label="Xavier / Glorot"
+)
+
+plt.plot(
+    he_history.history["loss"],
+    label="He Normal"
+)
+
+plt.title("Training Loss Comparison")
+
+plt.xlabel("Epoch")
+plt.ylabel("MSE Loss")
+
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+
+training_plot_path = os.path.join(
+    RESULTS_DIR,
+    "experiment_02_training_loss.png"
+)
+
+plt.savefig(
+    training_plot_path,
+    dpi=300
+)
+
+plt.show()
+
+
+# ============================================================
+# Plot 2: Validation Loss
+# ============================================================
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(
+    random_history.history["val_loss"],
+    label="Random Normal"
+)
+
+plt.plot(
+    glorot_history.history["val_loss"],
+    label="Xavier / Glorot"
+)
+
+plt.plot(
+    he_history.history["val_loss"],
+    label="He Normal"
+)
+
+plt.title("Validation Loss Comparison")
+
+plt.xlabel("Epoch")
+plt.ylabel("MSE Loss")
+
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+
+validation_plot_path = os.path.join(
+    RESULTS_DIR,
+    "experiment_02_validation_loss.png"
+)
+
+plt.savefig(
+    validation_plot_path,
+    dpi=300
+)
+
+plt.show()
+
+
+# ============================================================
+# Generate Report
+# ============================================================
+
+report_path = os.path.join(
+    RESULTS_DIR,
+    "experiment_02_report.txt"
+)
+
+with open(
+    report_path,
+    "w",
+    encoding="utf-8"
+) as report:
+
+    report.write("=" * 60 + "\n")
+    report.write("DEEP LEARNING - WEIGHT INITIALIZATION\n")
+    report.write("Experiment 02: Random vs Xavier vs He\n")
+    report.write("=" * 60 + "\n\n")
+
+    report.write("PROGRAM INFORMATION\n")
+    report.write("-" * 60 + "\n")
+
+    report.write(
+        f"Start Time: {start_datetime}\n"
+    )
+
+    report.write(
+        f"End Time: {end_datetime}\n"
+    )
+
+    report.write(
+        f"Total Execution Time: "
+        f"{program_duration:.4f} seconds\n\n"
+    )
+
+    report.write("EXPERIMENT CONFIGURATION\n")
+    report.write("-" * 60 + "\n")
+
+    report.write(
+        f"Random Seed: {SEED}\n"
+    )
+
+    report.write(
+        f"Samples: {SAMPLES}\n"
+    )
+
+    report.write(
+        f"Epochs: {EPOCHS}\n"
+    )
+
+    report.write(
+        f"Batch Size: {BATCH_SIZE}\n"
+    )
+
+    report.write(
+        f"Learning Rate: {LEARNING_RATE}\n\n"
+    )
+
+    for name, result in results.items():
+
+        report.write(
+            f"{name.upper()}\n"
+        )
+
+        report.write("-" * 60 + "\n")
+
+        report.write(
+            f"Training Loss: "
+            f"{result['train_loss']:.6f}\n"
+        )
+
+        report.write(
+            f"Validation Loss: "
+            f"{result['val_loss']:.6f}\n"
+        )
+
+        report.write(
+            f"Training MAE: "
+            f"{result['train_mae']:.6f}\n"
+        )
+
+        report.write(
+            f"Validation MAE: "
+            f"{result['val_mae']:.6f}\n"
+        )
+
+        report.write(
+            f"Execution Time: "
+            f"{result['duration']:.4f} seconds\n\n"
+        )
+
+    report.write("RESULT FILES\n")
+    report.write("-" * 60 + "\n")
+
+    report.write(
+        f"Training Loss Plot: "
+        f"{training_plot_path}\n"
+    )
+
+    report.write(
+        f"Validation Loss Plot: "
+        f"{validation_plot_path}\n"
+    )
+
+    report.write(
+        f"Report: {report_path}\n"
+    )
+
+    report.write("\n")
+    report.write("=" * 60 + "\n")
+    report.write("END OF REPORT\n")
+    report.write("=" * 60 + "\n")
+
+
+# ============================================================
+# Final Message
+# ============================================================
+
+print()
+print("=" * 60)
+print("Experiment completed successfully.")
+print(f"Report saved to: {report_path}")
+print(f"Training plot saved to: {training_plot_path}")
+print(f"Validation plot saved to: {validation_plot_path}")
+print("=" * 60)

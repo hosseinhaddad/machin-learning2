@@ -1,0 +1,52 @@
+============================================================
+DEEP LEARNING - WEIGHT INITIALIZATION
+Experiment 02: Random vs Xavier vs He
+============================================================
+
+PROGRAM INFORMATION
+------------------------------------------------------------
+Start Time: 2026-11-10 09:49:32.353723
+End Time: 2026-11-10 09:51:14.488928
+Total Execution Time: 102.1468 seconds
+
+EXPERIMENT CONFIGURATION
+------------------------------------------------------------
+Random Seed: 42
+Samples: 1000
+Epochs: 100
+Batch Size: 32
+Learning Rate: 0.001
+
+RANDOM NORMAL
+------------------------------------------------------------
+Training Loss: 0.000384
+Validation Loss: 0.000349
+Training MAE: 0.009901
+Validation MAE: 0.010596
+Execution Time: 35.1105 seconds
+
+XAVIER / GLOROT
+------------------------------------------------------------
+Training Loss: 0.003400
+Validation Loss: 0.004654
+Training MAE: 0.045578
+Validation MAE: 0.051667
+Execution Time: 33.4627 seconds
+
+HE NORMAL
+------------------------------------------------------------
+Training Loss: 0.005863
+Validation Loss: 0.006749
+Training MAE: 0.060523
+Validation MAE: 0.064854
+Execution Time: 33.5637 seconds
+
+RESULT FILES
+------------------------------------------------------------
+Training Loss Plot: results\experiment_02_training_loss.png
+Validation Loss Plot: results\experiment_02_validation_loss.png
+Report: results\experiment_02_report.txt
+
+============================================================
+END OF REPORT
+============================================================

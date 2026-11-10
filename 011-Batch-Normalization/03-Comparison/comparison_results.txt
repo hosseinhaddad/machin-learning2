@@ -1,0 +1,51 @@
+==============================
+Model Comparison Report
+==============================
+
+Execution Date: 2026-11-09
+Execution Time: 22:51:42
+
+Experimental Results:
+
+Train MAE
+Baseline: 1.5937
+Batch Normalization: 1.8317
+Difference: +14.93%
+
+Validation MAE
+Baseline: 2.0638
+Batch Normalization: 2.3974
+Difference: +16.16%
+
+Test MAE
+Baseline: 1.7026
+Batch Normalization: 1.9253
+Difference: +13.08%
+
+Train Loss
+Baseline: 4.0697
+Batch Normalization: 5.2716
+Difference: +29.53%
+
+Validation Loss
+Baseline: 7.4934
+Batch Normalization: 9.4775
+Difference: +26.48%
+
+Test Loss
+Baseline: 4.4193
+Batch Normalization: 6.2683
+Difference: +41.84%
+
+==============================
+Conclusion
+==============================
+
+Best Model Based on Test MAE: Baseline
+Lower Loss and MAE indicate better performance.
+
+==============================
+Execution Information
+==============================
+Execution Duration: 2.0560 seconds
+Execution Duration: 0.0343 minutes

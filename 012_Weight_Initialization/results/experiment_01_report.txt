@@ -1,0 +1,43 @@
+============================================================
+DEEP LEARNING - WEIGHT INITIALIZATION
+Experiment 01: Zero vs Random Initialization
+============================================================
+
+PROGRAM INFORMATION
+------------------------------------------------------------
+Start Time: 2026-11-10 09:37:57.924605
+End Time: 2026-11-10 09:39:07.471546
+Total Execution Time: 69.5469 seconds
+
+EXPERIMENT CONFIGURATION
+------------------------------------------------------------
+Random Seed: 42
+Samples: 1000
+Epochs: 100
+Batch Size: 32
+Learning Rate: 0.001
+
+ZERO INITIALIZATION
+------------------------------------------------------------
+Training Loss: 9.607114
+Validation Loss: 10.043251
+Training MAE: 2.532250
+Validation MAE: 2.596475
+Execution Time: 36.6714 seconds
+
+RANDOM INITIALIZATION
+------------------------------------------------------------
+Training Loss: 0.000571
+Validation Loss: 0.000479
+Training MAE: 0.013819
+Validation MAE: 0.012786
+Execution Time: 32.8726 seconds
+
+RESULT FILES
+------------------------------------------------------------
+Loss Curve: results\experiment_01_comparison.png
+Report: results\experiment_01_report.txt
+
+============================================================
+END OF REPORT
+============================================================
